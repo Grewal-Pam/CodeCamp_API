@@ -25,11 +25,45 @@ namespace CoreCodeCamp
             services.AddAutoMapper(Assembly.GetExecutingAssembly()); //After adding Auto mapper from nuget 
 
       services.AddControllers();//no view support , pure conyrollers only
+
+            //for swagger implementaion
+          //  services.AddSwaggerGen();
+
+            //can also modify the open api look by adding further details showing version, desc, license, terms of service
+            services.AddSwaggerGen(o =>
+                o.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Code Camp Core API",
+                    Description = "Asp .net core WebApi ",
+                    TermsOfService = new Uri("https://paima.com"), //can mention any url specific
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    {
+                        Name = "Parminder",
+                        Email = "parmindergrewal0791@gmail.com",
+                        Url = new Uri("https://paima.com")
+                    },
+                    License = new Microsoft.OpenApi.Models.OpenApiLicense
+                    {
+                        Name = "Open License",
+                         Url = new Uri("https://paima.com")
+                    }
+                }
+            )); 
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      if (env.IsDevelopment())
+            //for swagger implementaion add below 2 middlewares
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Code Camp API V1");
+            }); //run the project and hit http://localhost:6600/swagger/v1/swagger.json can see the open api json
+            //http://localhost:6600/swagger/index.html provides the swagger 
+
+            if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
       }
