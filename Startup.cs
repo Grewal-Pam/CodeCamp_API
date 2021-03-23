@@ -49,13 +49,22 @@ namespace CoreCodeCamp
                          Url = new Uri("https://paima.com")
                     }
                 }
-            )); 
+            ));
+
+            services.AddCors(options => options.AddDefaultPolicy(
+                builder => builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .WithOrigins("http://localhost:4200")));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
             //for swagger implementaion add below 2 middlewares
             app.UseSwagger();
+
+            app.UseCors(); //before routing , before authorisation
 
             app.UseSwaggerUI(c =>
             {
